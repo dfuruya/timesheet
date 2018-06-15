@@ -1,0 +1,11 @@
+body {
+    font-size: 14px;
+    height: 600px;
+    width: 500px;
+    margin: 10px;
+}
+
+button {
+    height: 50px;
+    outline: none;
+}

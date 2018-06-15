@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="jquery-clockpicker.min.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+
+        <button id="show-timesheet" class="btn btn-primary">Go to timesheet page</button>
+
+        <div id="main" style="display: none">
+
+            <!-- TABS -->
+            
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="default-tab" data-toggle="tab" href="#default" role="tab" aria-controls="default" aria-selected="true">Default</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="eight-tab" data-toggle="tab" href="#eight" role="tab" aria-controls="eight" aria-selected="false">8-Hour</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tab" data-toggle="tab" href="#custom" role="tab" aria-controls="custom" aria-selected="false">Custom</a>
+                </li>
+            </ul>
+
+            <!-- TAB CONTENT -->
+
+            <div class="tab-content" id="myTabContent">
+
+                <!-- DEFAULT -->
+
+                <div class="tab-pane fade show active" id="default" role="tabpanel" aria-labelledby="default-tab">
+
+                    <div class="row justify-content-md-center">
+                        
+                        <div class="col-sm-auto">
+                            This option will auto-fill every workday (M-F), starting from 8 AM - 4:30 PM, with 30 min breaks.
+                        </div>
+
+                    </div>
+                    <div class="row justify-content-md-center">
+
+                        <div class="col-sm-auto">
+                            <button id="btn-default" type="button" class="btn btn-primary">Fill out with default settings</button>
+                        </div>
+
+                    </div>
+
+                    <div class="row justify-content-md-center" id="btn-submit" style="display: none">
+
+                        <div class="col-sm-auto">Total hours worked:
+                            <p id="total-hours"></p>
+                        </div>
+
+                        <div class="col-sm-auto">
+                            Timesheet has been filled out! If you need to verify or change a time, now's the time to check. If it looks good, just click on the button below (or the button the page itself) to submit:
+                        </div>
+                        <div class="col-sm-auto">
+                            <button id="btn-submit" type="button" class="btn btn-success">Submit Timesheet</button>
+                        </div>                        
+                    </div>
+
+                </div>
+
+                <!-- 8 HOUR -->
+
+                <div class="tab-pane fade" id="eight" role="tabpanel" aria-labelledby="eight-tab">
+                    This option will auto-adjust the end times based on an 8-hr workday, with 30 min breaks.
+                </div>
+
+                <!-- CUSTOM -->
+
+                <div class="tab-pane fade" id="custom" role="tabpanel" aria-labelledby="custom-tab">
+                    This option will allow custom entries.
+                    <div id="eight">
+
+                        <div class="container">
+                            <div>
+                                <button type="button" id="btn-hours">Show Hours</button>
+                            </div>
+                            <div>
+                                <button type="button" id="btn-minutes">Show Minutes</button>
+                            </div>
+                        </div>
+                        <input id="input-a" value="" data-default="08:00">
+
+                    </div>
+                    <button id="fillTimes">Click to fill out start/end times</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="jquery-clockpicker.min.js"></script>
+    <script type="text/javascript" src="bootstrap.min.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+</body>
+
+</html>

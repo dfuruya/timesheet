@@ -1,0 +1,39 @@
+{
+    "name": "Fill Out Timesheet",
+    "version": "1.0",
+    "description": "Fill out a timesheet",
+    "permissions": [
+        "activeTab", 
+        "tabs", 
+        "declarativeContent", 
+        "storage", 
+        "webRequest",
+        "*://*.pro-unlimited.com/*",
+        "https://*.pro-unlimited.com/"
+    ],
+    "content_scripts": [{
+        "matches": ["https://*.pro-unlimited.com/worker/*"],
+        "css": ["jquery-clockpicker.min.css"],
+        "js": ["jquery-3.3.1.min.js", "content.js"]
+    }],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "page_action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "images/timesheet_icon-16.png",
+            "32": "images/timesheet_icon-32.png",
+            "48": "images/timesheet_icon-48.png",
+            "128": "images/timesheet_icon-128.png"
+        }
+    },
+    "icons": {
+        "16": "images/timesheet_icon-16.png",
+        "32": "images/timesheet_icon-32.png",
+        "48": "images/timesheet_icon-48.png",
+        "128": "images/timesheet_icon-128.png"
+    },
+    "manifest_version": 2
+}
