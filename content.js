@@ -8,7 +8,7 @@ const dateRangeDiv = document.getElementById('dateRangeDiv');
 const totalHoursDivsIds = Object.keys(allDays).map((item, index) => catString(['timeEntryTotalHours', index]));
 const totalHoursDivs = cacheElementsById(totalHoursDivsIds);
 
-const dateRangeObserver = createObserver(dateRangeDiv, dateRangeCallback);
+// const dateRangeObserver = createObserver(dateRangeDiv, dateRangeCallback);
 const totalHoursDivsObservers = createTotalHoursObservers(allDays);
 
 function createDefaultData() {
@@ -73,19 +73,19 @@ function createObserver(el, callback, config = observerConfig) {
     }
 }
 
-// Callback function to execute when mutations are observed
-function dateRangeCallback(mutationsList, observer) {
-    for (let mutation of mutationsList) {
-        if (mutation.type == 'childList') {
-            log('A child node has been added or removed.');
-        } else if (mutation.type == 'attributes') {
-            log('The ' + mutation.attributeName + ' attribute was modified.');
-            const addNewDiv = '#addNewDiv a';
-            dispatchEvent(addNewDiv, 'click');
-            observer.disconnect();
-        }
-    }
-}
+// // Callback function to execute when mutations are observed
+// function dateRangeCallback(mutationsList, observer) {
+//     for (let mutation of mutationsList) {
+//         if (mutation.type == 'childList') {
+//             log('A child node has been added or removed.');
+//         } else if (mutation.type == 'attributes') {
+//             log('The ' + mutation.attributeName + ' attribute was modified.');
+//             const addNewDiv = '#addNewDiv a';
+//             dispatchEvent(addNewDiv, 'click');
+//             observer.disconnect();
+//         }
+//     }
+// }
 
 function onShowTimeSheetClick() {
     const billingType = $('#selectedBillingType');
@@ -94,7 +94,9 @@ function onShowTimeSheetClick() {
 
     const dateRange = $('#dateRangeString');
     dateRange.find('option:contains("Please select one")').next().prop('selected', true);
-    dispatchEvent(dateRange, 'change'); // this triggers the dateRangeCallback
+    dispatchEvent(dateRange, 'change');
+
+    window.location = document.querySelector('#addNewDiv a').href;
 }
 
 function getTotalHours(days) {
