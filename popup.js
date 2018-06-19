@@ -1,12 +1,11 @@
 const log = chrome.extension.getBackgroundPage().console.log;
 const queryOptions = { active: true, currentWindow: true };
-let count = 0;
+let times;
 
 const showTimesheetBtn = $('#show-timesheet');
 const mainView = $('#main');
-const totalHours = $('#total-hours');
+const totalHoursDiv = $('#total-hours');
 const submitBtn = $('#btn-submit');
-
 const btnDefault = $('#btn-default');
 
 const input = $('#input-a');
@@ -48,7 +47,8 @@ function isBillingPage(url) {
 }
 
 function setTotalHours(hours) {
-    totalHours.text(hours);
+    log('setTotalHours', hours);
+    totalHoursDiv.text(hours);
     if (hours > 0) {
         submitBtn.show();
     }
@@ -67,13 +67,24 @@ window.addEventListener('DOMContentLoaded', function() {
     showSubmitReady();
 });
 
+
 chrome.tabs.onUpdated.addListener(
     function(tabId, changeInfo, tab) {
         if (changeInfo.url) {
             switchToBilling(changeInfo.url);
+            showSubmitReady();
         }
     }
 );
+
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    // Do whatever you want with the changes.
+    log('changes: ', changes);
+    const { totalHours } = changes;
+    if (totalHours && totalHours.newValue > 0) {
+        showSubmitReady();
+    }
+});
 
 // chrome.webRequest.onCompleted.addListener(function(details) {
 //     if (details.method === 'POST') count++;
@@ -83,17 +94,15 @@ chrome.tabs.onUpdated.addListener(
 //     }
 // }, { urls: ["*://*.pro-unlimited.com/*"] });
 
-// chrome.storage.sync.get('times', function(data) {
-//     log(`data: ${data}`);
-//     times = data.times;
-//     startTimes = times.startTimes;
-//     endTimes = times.endTimes;
-//     breaks = times.breaks;
-// });
+chrome.storage.sync.get('totalHours', function(data) {
+    log(`totalHours: ${JSON.stringify(data)}`);
+    times = data;
+});
 
 showTimesheetBtn.click(function(e) {
+    log('click showTimesheetBtn');
     const message = {
-        from: 'popup', 
+        from: 'popup',
         subject: 'showTimesheet',
     };
     sendMessage(message, switchToBilling);
@@ -101,7 +110,7 @@ showTimesheetBtn.click(function(e) {
 
 btnDefault.click(function(e) {
     const message = {
-        from: 'popup', 
+        from: 'popup',
         subject: 'fillWeek',
     };
     sendMessage(message, showSubmitReady);

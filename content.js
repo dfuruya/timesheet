@@ -1,15 +1,13 @@
 const log = console.log;
-let totalHours;
 const allDays = { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] };
 // Options for the observer (which mutations to observe)
 const observerConfig = { attributes: true, childList: true, subtree: true };
 const dateRangeDiv = document.getElementById('dateRangeDiv');
 
-const totalHoursDivsIds = Object.keys(allDays).map((item, index) => catString(['timeEntryTotalHours', index]));
-const totalHoursDivs = cacheElementsById(totalHoursDivsIds);
+const totalHoursDivsIds = Object.keys(allDays)
+    .map((item, index) => catString(['timeEntryTotalHours', index]));
 
 // const dateRangeObserver = createObserver(dateRangeDiv, dateRangeCallback);
-const totalHoursDivsObservers = createTotalHoursObservers(allDays);
 
 function createDefaultData() {
     return {
@@ -27,24 +25,26 @@ function catString(array, separator = '') {
     return array.join(separator);
 }
 
-function cacheElementsById(list) {
-    return list.map(id => document.getElementById(id));
+function cacheElements(list, type = 'native') {
+    return list.map(id => (type === 'jquery') 
+        ? $(`#${id}`)
+        : document.getElementById(id));
 }
 
-function createTotalHoursObservers(days) {
-    const totalHoursDivs = [];
-    for (let i = 0; i < days; i++) {
-        const id = catString(['timeEntryTotalHours', i]);
-        const el = document.getElementById(id);
-        if (el) {
-            totalHoursDivs.push(el);
-        }
-    }
+// function createTotalHoursObservers(days) {
+//     const totalHoursDivs = [];
+//     for (let i = 0; i < days; i++) {
+//         const id = catString(['timeEntryTotalHours', i]);
+//         const el = document.getElementById(id);
+//         if (el) {
+//             totalHoursDivs.push(el);
+//         }
+//     }
 
-    if (totalHoursDivs.length) {
-        return totalHoursDivs.map(div => createObserver(div, totalDivsCallback));
-    }
-}
+//     if (totalHoursDivs.length) {
+//         return totalHoursDivs.map(div => createObserver(div, totalDivsCallback));
+//     }
+// }
 
 function dispatchEvent(jqElement, event) {
     let dispatched;
@@ -65,13 +65,13 @@ function dispatchEvent(jqElement, event) {
     el[0].dispatchEvent(dispatched);
 }
 
-function createObserver(el, callback, config = observerConfig) {
-    if (el) {
-        const observer = new MutationObserver(callback, this);
-        observer.observe(el, config);
-        return observer;
-    }
-}
+// function createObserver(el, callback, config = observerConfig) {
+//     if (el) {
+//         const observer = new MutationObserver(callback, this);
+//         observer.observe(el, config);
+//         return observer;
+//     }
+// }
 
 // // Callback function to execute when mutations are observed
 // function dateRangeCallback(mutationsList, observer) {
@@ -99,14 +99,12 @@ function onShowTimeSheetClick() {
     window.location = document.querySelector('#addNewDiv a').href;
 }
 
-function getTotalHours(days) {
-    totalHours = 0;
-    for (let i = 0; i < days; i++) {
-        const id = catString(['#timeEntryTotalHours', i]);
-        const el = $(id);
-        const hours = parseFloat(el.text());
-        totalHours += hours;
-    }
+function getTotalHours(divs) {
+    let totalHours = 0;
+    divs.forEach(div => {
+        log(div, div.innerText);
+        totalHours += parseFloat(div.innerText);
+    });
     return totalHours;
 }
 
@@ -223,13 +221,29 @@ function fillDayNoLunch(index) {
 //     subject: 'showPageAction',
 // });
 
+
+
+window.onload = function(event) {
+    log('window loaded');
+    const totalHours = getTotalHours(cacheElements(totalHoursDivsIds));
+
+    chrome.storage.sync.set({ totalHours }, function() {
+        log('totalHours content: ', totalHours);
+    });
+
+    chrome.runtime.sendMessage({
+        from: 'content',
+        subject: 'checkTotal',
+    });
+};
+
 // Listen for messages from 'popup'
 chrome.runtime.onMessage.addListener(function(msg, sender, response) {
     let data;
     if (msg.from === 'popup') {
         switch (msg.subject) {
             case 'getTotalHours':
-                data = getTotalHours(allDays);
+                data = getTotalHours(cacheElements(totalHoursDivsIds));
                 break;
             case 'showTimesheet':
                 onShowTimeSheetClick();
