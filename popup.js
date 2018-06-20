@@ -1,4 +1,4 @@
-const log = chrome.extension.getBackgroundPage().console.log;
+const chromeLogger = chrome.extension.getBackgroundPage().console.log;
 const queryOptions = { active: true, currentWindow: true };
 let times;
 
@@ -16,11 +16,15 @@ input.clockpicker({
 const btnHours = $('#btn-hours');
 const btnMinutes = $('#btn-minutes');
 
+function log(...message) {
+    chromeLogger('POPUP >', ...message);
+}
+
 // sends a message to 'content'
 function sendMessage(message, callback = function() {}) {
     chrome.tabs.query(queryOptions, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, message, callback);
-    });    
+    });
 }
 
 function executeCode(code, callback = function() {}) {
@@ -89,7 +93,7 @@ function setTotalHours(hours) {
 
 function showSubmitReady() {
     const message = {
-        from: 'popup', 
+        from: 'popup',
         subject: 'getTotalHours',
     };
     sendMessage(message, setTotalHours);
@@ -162,7 +166,7 @@ loginBtn.click(function(e) {
 
 submitBtn.click(function(e) {
     const message = {
-        from: 'popup', 
+        from: 'popup',
         subject: 'submitTimesheet',
     };
     sendMessage(message);
@@ -208,3 +212,35 @@ btnMinutes.click(function(e) {
 //         const result = await message;
 //         console.log(result); // Logs true
 //     });
+
+/*
+localStorage(?) format:
+
+    {
+        totalHours: 5,
+        hours: {
+            mon: [
+                // rows
+                {
+                    startHour: '',
+                    startMin: '',
+                    startMeridiem: 1,
+                    endHour: '',
+                    endMin: '',
+                    endMeridiem: 1,
+                    type: 'Labor',
+                    noLunch: false,
+                }
+            ],
+            tue: [],
+            wed: [],
+            thu: [],
+            fri: [],
+            sat: [],
+            sun: [],
+        }
+    }
+
+
+billingDetailItems0.noBreakTaken1
+*/

@@ -1,14 +1,16 @@
-const log = console.log;
 const loginUrl = 'https://vms.sso.intuit.com/';
 const allDays = { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] };
 // Options for the observer (which mutations to observe)
 const observerConfig = { attributes: true, childList: true, subtree: true };
-const dateRangeDiv = document.getElementById('dateRangeDiv');
 
 const totalHoursDivsIds = Object.keys(allDays)
     .map((item, index) => catString(['timeEntryTotalHours', index]));
 
-// const dateRangeObserver = createObserver(dateRangeDiv, dateRangeCallback);
+const totalHoursDivs = cacheElements(totalHoursDivsIds);
+let totalHoursObservers;
+if (!totalHoursDivs.includes(null)) {
+    totalHoursObservers = createObservers(totalHoursDivs, totalHoursCallback);
+}
 
 function createDefaultData() {
     return {
@@ -22,71 +24,22 @@ function createDefaultData() {
     };
 }
 
-function catString(array, separator = '') {
-    return array.join(separator);
-}
-
-function cacheElements(list, type = 'native') {
-    return list.map(id => (type === 'jquery') 
-        ? $(`#${id}`)
-        : document.getElementById(id));
-}
-
-// function createTotalHoursObservers(days) {
-//     const totalHoursDivs = [];
-//     for (let i = 0; i < days; i++) {
-//         const id = catString(['timeEntryTotalHours', i]);
-//         const el = document.getElementById(id);
-//         if (el) {
-//             totalHoursDivs.push(el);
-//         }
-//     }
-
-//     if (totalHoursDivs.length) {
-//         return totalHoursDivs.map(div => createObserver(div, totalDivsCallback));
-//     }
-// }
-
-function dispatchEvent(jqElement, event) {
-    let dispatched;
-    switch (event) {
-        case 'click':
-            dispatched = new MouseEvent(event);
-            break;
-        case 'blur':
-            dispatched = new FocusEvent(event);
-            break;
-        case 'change':
-            dispatched = new InputEvent(event);
-            break;
-        default:
-            dispatched = null;
+// Callback function to execute when mutations are observed
+function totalHoursCallback(mutationsList, observer) {
+    for (let mutation of mutationsList) {
+        if (mutation.type == 'childList') {
+            log('A child node has been added or removed.');
+        } else if (mutation.type == 'attributes') {
+            log('The ' + mutation.attributeName + ' attribute was modified.');
+            const addNewDiv = '#addNewDiv a';
+            dispatchEvent(addNewDiv, 'click');
+            observer.disconnect();
+        }
     }
-    const el = (typeof jqElement === 'string') ? $(jqElement) : jqElement;
-    el[0].dispatchEvent(dispatched);
 }
 
-// function createObserver(el, callback, config = observerConfig) {
-//     if (el) {
-//         const observer = new MutationObserver(callback, this);
-//         observer.observe(el, config);
-//         return observer;
-//     }
-// }
 
-// // Callback function to execute when mutations are observed
-// function dateRangeCallback(mutationsList, observer) {
-//     for (let mutation of mutationsList) {
-//         if (mutation.type == 'childList') {
-//             log('A child node has been added or removed.');
-//         } else if (mutation.type == 'attributes') {
-//             log('The ' + mutation.attributeName + ' attribute was modified.');
-//             const addNewDiv = '#addNewDiv a';
-//             dispatchEvent(addNewDiv, 'click');
-//             observer.disconnect();
-//         }
-//     }
-// }
+
 
 function onShowTimeSheetClick() {
     const billingType = $('#selectedBillingType');
@@ -118,20 +71,6 @@ function checkSession() {
     return (expiredSessionSpan && text.indexOf(expectedText) > -1);
 }
 
-// function calcEnd(start, duration, pm) {
-//     const [hours, minutes] = start.split(':');
-//     const parsedHrs = parseInt(hours);
-//     const parsedMinutes = parseInt(minutes);
-
-//     if ((parseInt(hours) + duration) > 12) {
-
-//     }
-// }
-
-// function fillRow(start, hours) {
-
-// }
-
 function onSubmitTimesheet() {
     const submitBtn = '#billingEditListingCommand input[type="submit"]';
     dispatchEvent(submitBtn, 'click');
@@ -154,10 +93,18 @@ function getRowQuery(index, row, post) {
     return catString(array, separator);
 }
 
+function getLunchQuery(index) {
+    const array = [
+        `#billingDetailItems${index}`,
+        `noBreakTaken1`,
+    ];
+    const separator = '\\.';
+    return catString(array, separator);
+}
+
 function getAddNewQuery(index) {
     const array = [
-        '#billingDtls',
-        index,
+        '#billingDtls', index,
         ` a:contains('Add New')`,
     ];
     return catString(array);
@@ -216,13 +163,16 @@ function fillDay(index) {
 
 function fillDayNoLunch(index) {
     let row = 0;
+    let startHourM, startMinute, endMeridiem, noLunch;
     startHourM = getRowQuery(index, row, 'startHourM');
     endHourM = getRowQuery(index, row, 'endHourM');
     endMeridiem = getRowQuery(index, row, 'endMeridiem');
+    noLunch = getLunchQuery(index);
     $(startHourM).val('8');
     $(endHourM).val('4');
     $(endMeridiem).val('1');
-    dispatchEvent(endMeridiem, 'blur');
+    $(noLunch).prop('checked', true);
+    dispatchEvent(noLunch, 'blur');
 }
 
 // // Inform the background page that this tab should have a page-action
@@ -230,15 +180,6 @@ function fillDayNoLunch(index) {
 //     from: 'content',
 //     subject: 'showPageAction',
 // });
-
-function login() {
-    window.location.href = loginUrl;
-}
-
-function checkHome() {
-    return window.location.href.indexOf('standard_home') > -1;
-}
-
 
 window.onload = function(event) {
     log('window loaded');
@@ -274,13 +215,13 @@ chrome.runtime.onMessage.addListener(function(msg, sender, response) {
                 data = null;
                 break;
             case 'checkHome':
-                data = checkHome();
+                data = checkUrl('standard_home');
                 break;
             case 'checkSession':
                 data = checkSession();
                 break;
             case 'login':
-                login();
+                goToUrl(loginUrl);
                 data = 'standard_home';
                 break;
             case 'submitTimesheet':
