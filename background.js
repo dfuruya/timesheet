@@ -20,15 +20,13 @@ chrome.storage.sync.get(['totalHours'], function(result) {
     }
 });
 
-chrome.runtime.onMessage.addListener(
-    function(msg, sender, sendResponse) {
-        const popupWindows = chrome.extension.getViews({ type: 'popup' });
-        if (popupWindows.length) { // A popup has been found
-            // details is the object from the onMessage event (see 2)
-            popupWindows[0].showSubmitReady(message, sendResponse);
-        }
+chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+    const popupWindows = chrome.extension.getViews({ type: 'popup' });
+    if (popupWindows.length) { // A popup has been found
+        // details is the object from the onMessage event (see 2)
+        popupWindows[0].showSubmitReady(msg, sendResponse);
     }
-);
+});
 
 // chrome.storage.sync.set('times', function(data) {
 //     log(`data: ${data}`);

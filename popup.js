@@ -4,6 +4,7 @@ let times;
 
 const showTimesheetBtn = $('#show-timesheet');
 const mainView = $('#main');
+const loginBtn = $('#re-login');
 const totalHoursDiv = $('#total-hours');
 const submitBtn = $('#btn-submit');
 const btnDefault = $('#btn-default');
@@ -42,6 +43,38 @@ function switchToBilling(url) {
     }
 }
 
+function checkIfHome() {
+    const message = {
+        from: 'popup',
+        subject: 'checkHome',
+    };
+    sendMessage(message, switchToHome);
+}
+
+function switchToHome(onStandardHome) {
+    if (onStandardHome) {
+        showTimesheetBtn.show();
+        mainView.hide();
+        loginBtn.hide();
+    }
+}
+
+function checkIfLoggedIn() {
+    const message = {
+        from: 'popup',
+        subject: 'checkSession',
+    };
+    sendMessage(message, switchToLogin);
+}
+
+function switchToLogin(sessionExpired) {
+    if (sessionExpired) {
+        showTimesheetBtn.hide();
+        mainView.hide();
+        loginBtn.show();
+    }
+}
+
 function isBillingPage(url) {
     return url.indexOf('billing') > -1;
 }
@@ -62,20 +95,23 @@ function showSubmitReady() {
     sendMessage(message, setTotalHours);
 }
 
+
+
+
 window.addEventListener('DOMContentLoaded', function() {
+    checkIfHome();
+    checkIfLoggedIn();
     checkIfBilling();
     showSubmitReady();
 });
 
 
-chrome.tabs.onUpdated.addListener(
-    function(tabId, changeInfo, tab) {
-        if (changeInfo.url) {
-            switchToBilling(changeInfo.url);
-            showSubmitReady();
-        }
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if (changeInfo.url) {
+        switchToBilling(changeInfo.url);
+        showSubmitReady();
     }
-);
+});
 
 chrome.storage.onChanged.addListener(function(changes, areaName) {
     // Do whatever you want with the changes.
@@ -114,6 +150,14 @@ btnDefault.click(function(e) {
         subject: 'fillWeek',
     };
     sendMessage(message, showSubmitReady);
+});
+
+loginBtn.click(function(e) {
+    const message = {
+        from: 'popup',
+        subject: 'login',
+    };
+    sendMessage(message, switchToBilling);
 });
 
 submitBtn.click(function(e) {

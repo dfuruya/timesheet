@@ -1,4 +1,5 @@
 const log = console.log;
+const loginUrl = 'https://vms.sso.intuit.com/';
 const allDays = { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] };
 // Options for the observer (which mutations to observe)
 const observerConfig = { attributes: true, childList: true, subtree: true };
@@ -102,10 +103,19 @@ function onShowTimeSheetClick() {
 function getTotalHours(divs) {
     let totalHours = 0;
     divs.forEach(div => {
-        log(div, div.innerText);
         totalHours += parseFloat(div.innerText);
     });
     return totalHours;
+}
+
+function checkSession() {
+    const expiredSessionSpan = $('span.body10bold');
+    let text;
+    if (expiredSessionSpan) {
+        text = expiredSessionSpan.text();
+    }
+    const expectedText = `Your Session has Expired.`;
+    return (expiredSessionSpan && text.indexOf(expectedText) > -1);
 }
 
 // function calcEnd(start, duration, pm) {
@@ -221,12 +231,22 @@ function fillDayNoLunch(index) {
 //     subject: 'showPageAction',
 // });
 
+function login() {
+    window.location.href = loginUrl;
+}
+
+function checkHome() {
+    return window.location.href.indexOf('standard_home') > -1;
+}
 
 
 window.onload = function(event) {
     log('window loaded');
-    const totalHours = getTotalHours(cacheElements(totalHoursDivsIds));
-
+    const elements = cacheElements(totalHoursDivsIds);
+    let totalHours = 0;
+    if (elements.some(n => n !== null)) {
+        totalHours = getTotalHours(elements);
+    }
     chrome.storage.sync.set({ totalHours }, function() {
         log('totalHours content: ', totalHours);
     });
@@ -251,6 +271,16 @@ chrome.runtime.onMessage.addListener(function(msg, sender, response) {
                 break;
             case 'fillWeek':
                 fillWeek();
+                data = null;
+                break;
+            case 'checkHome':
+                data = checkHome();
+                break;
+            case 'checkSession':
+                data = checkSession();
+                break;
+            case 'login':
+                login();
                 data = 'billing';
                 break;
             case 'submitTimesheet':
