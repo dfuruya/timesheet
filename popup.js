@@ -157,7 +157,7 @@ loginBtn.click(function(e) {
         from: 'popup',
         subject: 'login',
     };
-    sendMessage(message, switchToBilling);
+    sendMessage(message, switchToHome);
 });
 
 submitBtn.click(function(e) {

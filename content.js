@@ -281,7 +281,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, response) {
                 break;
             case 'login':
                 login();
-                data = 'billing';
+                data = 'standard_home';
                 break;
             case 'submitTimesheet':
                 onSubmitTimesheet();

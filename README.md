@@ -8,6 +8,7 @@
 ### TODO CHANGES:
 
 * Refactor out jquery (to plain JS)
+* Clean up file structure, modularize
 
 ### TODO FEATURES:
 
