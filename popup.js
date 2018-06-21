@@ -7,6 +7,8 @@ const mainView = $('#main');
 const loginBtn = $('#re-login');
 const totalHoursDiv = $('#total-hours');
 const submitBtn = $('#btn-submit');
+const submitContainer = $('#submit-container');
+
 const btnDefault = $('#btn-default');
 
 
@@ -67,8 +69,9 @@ function sendMessage(message, callback = function() {}) {
 
 function parseTime(time) {
     let meridiem = '0'; // default value (AM)
-    let [hour, minutes] = time.split(':');
+    let [ hour, minutes ] = time.split(':');
     hour = parseInt(hour);
+    minutes = parseInt(minutes).toString();
     if (hour > 12) {
         hour -= 12;
         meridiem = '1';
@@ -137,7 +140,7 @@ function setTotalHours(hours) {
     log('setTotalHours', hours);
     totalHoursDiv.text(hours);
     if (hours > 0) {
-        submitBtn.show();
+        submitContainer.show();
     }
 }
 

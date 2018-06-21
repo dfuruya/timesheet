@@ -147,7 +147,8 @@ function fillEntry(message) {
         const [ key ] = Object.keys(postfix);
         const post = `${postType}${key}`;
         const el = getRowQuery(index, row, post);
-        $(el).val(postfix[key]).blur();
+        $(el).val(postfix[key]);
+        dispatchEvent(el, 'blur');
     });
 }
 
