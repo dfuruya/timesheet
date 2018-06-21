@@ -1,14 +1,14 @@
 const chromeLogger = chrome.extension.getBackgroundPage().console.log;
 const HOSTNAME = 'prowand.pro-unlimited.com';
-const defaultHours = {
-    mon: [],
-    tue: [],
-    wed: [],
-    thu: [],
-    fri: [],
-    sat: [],
-    sun: [],
-};
+const defaultHours = [
+    { rows: [], day: 'monday' }, 
+    { rows: [], day: 'tuesday' },
+    { rows: [], day: 'wednesday' },
+    { rows: [], day: 'thursday' },
+    { rows: [], day: 'friday' },
+    { rows: [], day: 'saturday' },
+    { rows: [], day: 'sunday' },
+];
 const defaultStorage = {
     totalHours: 0,
     hours: defaultHours,

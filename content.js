@@ -12,15 +12,16 @@ if (!totalHoursDivs.includes(null)) {
     totalHoursObservers = createObservers(totalHoursDivs, totalHoursCallback);
 }
 
-function createDefaultData() {
+function createDefaultRow() {
     return {
-        startHour: '0',
-        startMin: '0',
+        startHourM: '-1',
+        startMinute: '0',
         startMeridiem: '0',
-        endHour: '0',
-        endMin: '0',
+        endHourM: '-1',
+        endMinute: '0',
         endMeridiem: '0',
-        type: 'Labor',
+        timeEntrySpanType: 'Labor',
+        noBreakTaken1: false,
     };
 }
 
@@ -32,13 +33,11 @@ function totalHoursCallback(mutationsList, observer) {
         } else if (mutation.type == 'attributes') {
             log('The ' + mutation.attributeName + ' attribute was modified.');
             const addNewDiv = '#addNewDiv a';
-            dispatchEvent(addNewDiv, 'click');
-            observer.disconnect();
+            // dispatchEvent(addNewDiv, 'click');
+            // observer.disconnect();
         }
     }
 }
-
-
 
 
 function onShowTimeSheetClick() {
@@ -70,6 +69,32 @@ function checkSession() {
     const expectedText = `Your Session has Expired.`;
     return (expiredSessionSpan && text.indexOf(expectedText) > -1);
 }
+
+
+function scrapeTimes() {
+    const days = document.querySelectorAll('[id^="billingDtls"]');
+    const hours = [];
+    days.forEach((day, i) => {
+        const dayRows = [];
+        const rows = day.querySelectorAll('.body11 select');
+        rows.forEach(row => {
+            const dayRow = {};
+            const { id, value } = row;
+            const lastDot = id.lastIndexOf('.');
+            const [index, fieldType] = id.slice(lastDot - 1).split('.');
+            const rowIndex = parseInt(index);
+            dayRow[fieldType] = value;
+            dayRows[rowIndex] = { ...dayRows[rowIndex], ...dayRow };
+        });
+        const dayInfo = {
+            day: i,
+            rows: dayRows,
+        };
+        hours.push(dayInfo);
+    });
+    return hours;
+}
+
 
 function onSubmitTimesheet() {
     const submitBtn = '#billingEditListingCommand input[type="submit"]';
@@ -219,6 +244,9 @@ chrome.runtime.onMessage.addListener(function(msg, sender, response) {
                 break;
             case 'checkSession':
                 data = checkSession();
+                break;
+            case 'scrapeTimesheet':
+                data = scrapeTimes();
                 break;
             case 'login':
                 goToUrl(loginUrl);

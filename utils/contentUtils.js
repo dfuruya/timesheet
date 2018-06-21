@@ -87,18 +87,3 @@ function goToUrl(url) {
 function checkUrl(subStr) {
     return window.location.href.indexOf(subStr) > -1;
 }
-
-
-
-// const contentUtils = {
-//     log,
-//     catString,
-//     observify,
-//     createObservers,
-//     dispatchEvent,
-//     cacheElements,
-//     goToUrl,
-//     checkUrl,
-// };
-
-// export default contentUtils;

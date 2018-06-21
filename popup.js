@@ -27,10 +27,14 @@ function sendMessage(message, callback = function() {}) {
     });
 }
 
-function executeCode(code, callback = function() {}) {
-    chrome.tabs.query(queryOptions, function(tabs) {
-        chrome.tabs.executeScript(tabs[0].id, { code }, callback);
-    });
+// function executeCode(code, callback = function() {}) {
+//     chrome.tabs.query(queryOptions, function(tabs) {
+//         chrome.tabs.executeScript(tabs[0].id, { code }, callback);
+//     });
+// }
+
+function formatMsg(subject) {
+    return { from: 'popup', subject };
 }
 
 function checkIfBilling() {
@@ -48,10 +52,7 @@ function switchToBilling(url) {
 }
 
 function checkIfHome() {
-    const message = {
-        from: 'popup',
-        subject: 'checkHome',
-    };
+    const message = formatMsg('checkHome');
     sendMessage(message, switchToHome);
 }
 
@@ -64,10 +65,7 @@ function switchToHome(onStandardHome) {
 }
 
 function checkIfLoggedIn() {
-    const message = {
-        from: 'popup',
-        subject: 'checkSession',
-    };
+    const message = formatMsg('checkSession');
     sendMessage(message, switchToLogin);
 }
 
@@ -92,14 +90,18 @@ function setTotalHours(hours) {
 }
 
 function showSubmitReady() {
-    const message = {
-        from: 'popup',
-        subject: 'getTotalHours',
-    };
+    const message = formatMsg('getTotalHours');
     sendMessage(message, setTotalHours);
 }
 
+function scrapeTimesheet() {
+    const message = formatMsg('scrapeTimesheet');
+    sendMessage(message, returnTimes);
+}
 
+function returnTimes(data) {
+    log('returned times:', data);
+}
 
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -107,6 +109,7 @@ window.addEventListener('DOMContentLoaded', function() {
     checkIfLoggedIn();
     checkIfBilling();
     showSubmitReady();
+    scrapeTimesheet();
 });
 
 
@@ -141,34 +144,22 @@ chrome.storage.sync.get('totalHours', function(data) {
 
 showTimesheetBtn.click(function(e) {
     log('click showTimesheetBtn');
-    const message = {
-        from: 'popup',
-        subject: 'showTimesheet',
-    };
+    const message = formatMsg('showTimesheet');
     sendMessage(message, switchToBilling);
 });
 
 btnDefault.click(function(e) {
-    const message = {
-        from: 'popup',
-        subject: 'fillWeek',
-    };
+    const message = formatMsg('fillWeek');
     sendMessage(message, showSubmitReady);
 });
 
 loginBtn.click(function(e) {
-    const message = {
-        from: 'popup',
-        subject: 'login',
-    };
+    const message = formatMsg('login');
     sendMessage(message, switchToHome);
 });
 
 submitBtn.click(function(e) {
-    const message = {
-        from: 'popup',
-        subject: 'submitTimesheet',
-    };
+    const message = formatMsg('submitTimesheet');
     sendMessage(message);
 });
 
@@ -218,27 +209,57 @@ localStorage(?) format:
 
     {
         totalHours: 5,
-        hours: {
-            mon: [
-                // rows
-                {
-                    startHour: '',
-                    startMin: '',
-                    startMeridiem: 1,
-                    endHour: '',
-                    endMin: '',
-                    endMeridiem: 1,
-                    type: 'Labor',
-                    noLunch: false,
-                }
-            ],
-            tue: [],
-            wed: [],
-            thu: [],
-            fri: [],
-            sat: [],
-            sun: [],
-        }
+        hours: [
+            {
+                day: 'monday',
+                rows: [
+                    {
+                        startHourM: '-1',
+                        startMinute: '0',
+                        startMeridiem: '0',
+                        endHourM: '-1',
+                        endMinute: '0',
+                        endMeridiem: '0',
+                        timeEntrySpanType: 'Labor',
+                        noBreakTaken1: false,
+                    }
+                    {
+                        startHourM          => 
+                        startMinute         => 
+                        startMeridiem       => 
+                        endHourM            => 
+                        endMinute           => 
+                        endMeridiem         => 
+                        timeEntrySpanType   => 
+                        noBreakTaken1       => 
+                    }
+                ]
+            }, 
+            {
+                day: 'tuesday',
+                rows: [],
+            },
+            {
+                day: 'wednesday',
+                rows: [],
+            },
+            {
+                day: 'thursday',
+                rows: [],
+            },
+            {
+                day: 'friday',
+                rows: [],
+            },
+            {
+                day: 'saturday',
+                rows: [],
+            },
+            {
+                day: 'sunday',
+                rows: [],
+            },
+        ]
     }
 
 
