@@ -9,22 +9,43 @@ const totalHoursDiv = $('#total-hours');
 const submitBtn = $('#btn-submit');
 const btnDefault = $('#btn-default');
 
-const input = $('#input-a');
-input.clockpicker({
-    autoclose: true,
-    afterDone: function() {
-        const time = parseTime(input.val());
-        const query = {
-            index: 0,
-            row: 0,
-            postType: 'start',
-        }
-        fillEntry(time, query);
-    },
-});
+
+
+const inputA = $('#input-a');
+const inputAConfig = {
+    index: 0,
+    row: 0,
+    postType: 'start',
+};
+inputA.clockpicker(createClockConfig(inputA, inputAConfig, fillEntry));
+
+const inputB = $('#input-b');
+inputBConfig = {
+    index: 0,
+    row: 0,
+    postType: 'end',
+};
+inputB.clockpicker(createClockConfig(inputB, inputBConfig, fillEntry));
 
 const btnHours = $('#btn-hours');
 const btnMinutes = $('#btn-minutes');
+
+
+
+function createClockConfig(input, configs, callback) {
+    const { index, row, postType } = configs;
+    return {
+        autoclose: true,
+        afterDone: function() {
+            const timeObj = parseTime(input.val());
+            const query = { index, row, postType };
+            log(timeObj, query);
+            callback(timeObj, query);
+        }
+    };
+}
+
+
 
 function log(...message) {
     chromeLogger('POPUP >', ...message);
@@ -45,8 +66,8 @@ function sendMessage(message, callback = function() {}) {
 
 
 function parseTime(time) {
-    let meridiem = '0';     // default value (AM)
-    let [ hour, minutes ] = time.split(':');
+    let meridiem = '0'; // default value (AM)
+    let [hour, minutes] = time.split(':');
     hour = parseInt(hour);
     if (hour > 12) {
         hour -= 12;
