@@ -11,26 +11,94 @@ const submitContainer = $('#submit-container');
 
 const btnDefault = $('#btn-default');
 
+const btnHours = $('#btn-hours');
+const btnMinutes = $('#btn-minutes');
 
-
-const inputA = $('#input-a');
-const inputAConfig = {
+// monday
+const inputMondayStart = $('#input-monday-0-start');
+const inputMondayStartConfig = {
     index: 0,
     row: 0,
     postType: 'start',
 };
-inputA.clockpicker(createClockConfig(inputA, inputAConfig, fillEntry));
+inputMondayStart.clockpicker(createClockConfig(inputMondayStart, inputMondayStartConfig, fillEntry));
 
-const inputB = $('#input-b');
-inputBConfig = {
+const inputMondayEnd = $('#input-monday-0-end');
+const inputMondayEndConfig = {
     index: 0,
     row: 0,
     postType: 'end',
 };
-inputB.clockpicker(createClockConfig(inputB, inputBConfig, fillEntry));
+inputMondayEnd.clockpicker(createClockConfig(inputMondayEnd, inputMondayEndConfig, fillEntry));
 
-const btnHours = $('#btn-hours');
-const btnMinutes = $('#btn-minutes');
+// tuesday
+const inputTuesdayStart = $('#input-tuesday-0-start');
+const inputTuesdayStartConfig = {
+    index: 1,
+    row: 0,
+    postType: 'start',
+};
+inputTuesdayStart.clockpicker(createClockConfig(inputTuesdayStart, inputTuesdayStartConfig, fillEntry));
+
+const inputTuesdayEnd = $('#input-tuesday-0-end');
+const inputTuesdayEndConfig = {
+    index: 1,
+    row: 0,
+    postType: 'end',
+};
+inputTuesdayEnd.clockpicker(createClockConfig(inputTuesdayEnd, inputTuesdayEndConfig, fillEntry));
+
+// wednesday
+const inputWednesdayStart = $('#input-wednesday-0-start');
+const inputWednesdayStartConfig = {
+    index: 2,
+    row: 0,
+    postType: 'start',
+};
+inputWednesdayStart.clockpicker(createClockConfig(inputWednesdayStart, inputWednesdayStartConfig, fillEntry));
+
+const inputWednesdayEnd = $('#input-wednesday-0-end');
+const inputWednesdayEndConfig = {
+    index: 2,
+    row: 0,
+    postType: 'end',
+};
+inputWednesdayEnd.clockpicker(createClockConfig(inputWednesdayEnd, inputWednesdayEndConfig, fillEntry));
+
+// thursday
+const inputThursdayStart = $('#input-thursday-0-start');
+const inputThursdayStartConfig = {
+    index: 3,
+    row: 0,
+    postType: 'start',
+};
+inputThursdayStart.clockpicker(createClockConfig(inputThursdayStart, inputThursdayStartConfig, fillEntry));
+
+const inputThursdayEnd = $('#input-thursday-0-end');
+const inputThursdayEndConfig = {
+    index: 3,
+    row: 0,
+    postType: 'end',
+};
+inputThursdayEnd.clockpicker(createClockConfig(inputThursdayEnd, inputThursdayEndConfig, fillEntry));
+
+// friday
+const inputFridayStart = $('#input-friday-0-start');
+const inputFridayStartConfig = {
+    index: 4,
+    row: 0,
+    postType: 'start',
+};
+inputFridayStart.clockpicker(createClockConfig(inputFridayStart, inputFridayStartConfig, fillEntry));
+
+const inputFridayEnd = $('#input-friday-0-end');
+const inputFridayEndConfig = {
+    index: 4,
+    row: 0,
+    postType: 'end',
+};
+inputFridayEnd.clockpicker(createClockConfig(inputFridayEnd, inputFridayEndConfig, fillEntry));
+
 
 
 
@@ -299,26 +367,7 @@ localStorage(?) format:
                 day: 'tuesday',
                 rows: [],
             },
-            {
-                day: 'wednesday',
-                rows: [],
-            },
-            {
-                day: 'thursday',
-                rows: [],
-            },
-            {
-                day: 'friday',
-                rows: [],
-            },
-            {
-                day: 'saturday',
-                rows: [],
-            },
-            {
-                day: 'sunday',
-                rows: [],
-            },
+            ...
         ]
     }
 
