@@ -39,33 +39,39 @@
 
                 <div class="tab-pane fade show active" id="default" role="tabpanel" aria-labelledby="default-tab">
 
-                    <div class="row justify-content-md-center">
-                        
-                        <div class="col-sm-auto">
-                            This option will auto-fill every workday (M-F), starting from 8 AM - 4:30 PM, with 30 min breaks.
+                    <div class="container">
+                        <div class="row">
+                            
+                            <div class="col-sm">
+                                This option will auto-fill every workday (M-F), starting from 8 AM - 4:30 PM, with 30 min breaks.
+                            </div>
+
                         </div>
 
-                    </div>
-                    <div class="row justify-content-md-center">
+                        <div class="row">
 
-                        <div class="col-sm-auto">
-                            <button id="btn-default" type="button" class="btn btn-primary">Fill out with default settings</button>
+                            <div class="col-sm">
+                                <button id="btn-default" type="button" class="btn btn-primary">Fill out with default settings</button>
+                            </div>
+
                         </div>
 
-                    </div>
+                        <div class="container" id="submit-container" style="display: none">
 
-                    <div class="row justify-content-md-center" id="submit-container" style="display: none">
+                            <hr/>
+                            <div class="row">Total hours worked:</div>
+                            <p id="total-hours" style="font-size: 20px"></p>
 
-                        <div class="col-sm-auto">Total hours worked:
-                            <p id="total-hours"></p>
+                            <div class="row">
+                                Timesheet has been filled out! If you need to verify or change a time, now's the time to check. If it looks good, just click on the button below (or the button the page itself) to submit:
+                            </div>
+
+                            <div class="row">
+                                <button id="btn-submit" type="button" class="btn btn-success">Submit Timesheet</button>
+                            </div>
+
                         </div>
 
-                        <div class="col-sm-auto">
-                            Timesheet has been filled out! If you need to verify or change a time, now's the time to check. If it looks good, just click on the button below (or the button the page itself) to submit:
-                        </div>
-                        <div class="col-sm-auto">
-                            <button id="btn-submit" type="button" class="btn btn-success">Submit Timesheet</button>
-                        </div>                        
                     </div>
 
                 </div>
