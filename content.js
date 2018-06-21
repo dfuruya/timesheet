@@ -81,7 +81,7 @@ function scrapeTimes() {
             const dayRow = {};
             const { id, value } = row;
             const lastDot = id.lastIndexOf('.');
-            const [index, fieldType] = id.slice(lastDot - 1).split('.');
+            const [ index, fieldType ] = id.slice(lastDot - 1).split('.');
             const rowIndex = parseInt(index);
             dayRow[fieldType] = value;
             dayRows[rowIndex] = { ...dayRows[rowIndex], ...dayRow };
@@ -133,6 +133,22 @@ function getAddNewQuery(index) {
         ` a:contains('Add New')`,
     ];
     return catString(array);
+}
+
+
+function fillEntry(message) {
+    const { hour, minutes, meridiem, index, row, postType } = message;
+    const postFixes = [
+        { 'HourM': hour },
+        { 'Minute': minutes },
+        { 'Meridiem': meridiem },
+    ];
+    postFixes.forEach(postfix => {
+        const [ key ] = Object.keys(postfix);
+        const post = `${postType}${key}`;
+        const el = getRowQuery(index, row, post);
+        $(el).val(postfix[key]);
+    });
 }
 
 function fillDay(index) {
@@ -227,9 +243,10 @@ window.onload = function(event) {
 chrome.runtime.onMessage.addListener(function(msg, sender, response) {
     let data;
     if (msg.from === 'popup') {
+        const totalHours = cacheElements(totalHoursDivsIds);
         switch (msg.subject) {
             case 'getTotalHours':
-                data = getTotalHours(cacheElements(totalHoursDivsIds));
+                data = getTotalHours(totalHours);
                 break;
             case 'showTimesheet':
                 onShowTimeSheetClick();
@@ -239,6 +256,10 @@ chrome.runtime.onMessage.addListener(function(msg, sender, response) {
                 fillWeek();
                 data = null;
                 break;
+            case 'fillEntry':
+                fillEntry(msg);
+                data = null;
+                break;
             case 'checkHome':
                 data = checkUrl('standard_home');
                 break;
@@ -246,7 +267,10 @@ chrome.runtime.onMessage.addListener(function(msg, sender, response) {
                 data = checkSession();
                 break;
             case 'scrapeTimesheet':
-                data = scrapeTimes();
+                data = {
+                    hours: scrapeTimes(),
+                    totalHours: getTotalHours(totalHours),
+                };
                 break;
             case 'login':
                 goToUrl(loginUrl);

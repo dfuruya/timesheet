@@ -23,7 +23,7 @@ function clearStorage() {
         log('Resetting Storage');
         log('totalHours: ', result.totalHours);
         log('hours: ', result.hours);
-    });    
+    });
 }
 
 

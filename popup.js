@@ -11,8 +11,18 @@ const btnDefault = $('#btn-default');
 
 const input = $('#input-a');
 input.clockpicker({
-    autoclose: true
+    autoclose: true,
+    afterDone: function() {
+        const time = parseTime(input.val());
+        const query = {
+            index: 0,
+            row: 0,
+            postType: 'start',
+        }
+        fillEntry(time, query);
+    },
 });
+
 const btnHours = $('#btn-hours');
 const btnMinutes = $('#btn-minutes');
 
@@ -32,6 +42,27 @@ function sendMessage(message, callback = function() {}) {
 //         chrome.tabs.executeScript(tabs[0].id, { code }, callback);
 //     });
 // }
+
+
+function parseTime(time) {
+    let meridiem = '0';     // default value (AM)
+    let [ hour, minutes ] = time.split(':');
+    hour = parseInt(hour);
+    if (hour > 12) {
+        hour -= 12;
+        meridiem = '1';
+    }
+    if (hour === 0) {
+        hour = 12;
+    }
+    hour = hour.toString();
+    return { hour, minutes, meridiem };
+}
+
+function fillEntry(time, query) {
+    const message = { ...formatMsg('fillEntry'), ...time, ...query };
+    sendMessage(message, null);
+}
 
 function formatMsg(subject) {
     return { from: 'popup', subject };
@@ -96,11 +127,16 @@ function showSubmitReady() {
 
 function scrapeTimesheet() {
     const message = formatMsg('scrapeTimesheet');
-    sendMessage(message, returnTimes);
+    sendMessage(message, saveTimes);
 }
 
-function returnTimes(data) {
-    log('returned times:', data);
+function saveTimes(data) {
+    const { hours, totalHours } = data;
+    if (totalHours > 0) {
+        chrome.storage.sync.set({ hours }, function() {
+            log('Saving:', hours);
+        });
+    }
 }
 
 
@@ -123,7 +159,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 chrome.storage.onChanged.addListener(function(changes, areaName) {
     // Do whatever you want with the changes.
     log('changes: ', changes);
-    const { totalHours } = changes;
+    const { totalHours, hours } = changes;
     if (totalHours && totalHours.newValue > 0) {
         showSubmitReady();
     }

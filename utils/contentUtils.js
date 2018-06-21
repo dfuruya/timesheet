@@ -1,8 +1,8 @@
-/*
+/*************************************************************************
 *
 *   General
 *
-*/
+*************************************************************************/
 
 function log(...message) {
     console.log('CONTENT >', ...message);
@@ -13,11 +13,11 @@ function catString(array, separator = '') {
 }
 
 
-/*
+/*************************************************************************
 *
 *   Observers
 *
-*/
+*************************************************************************/
 
 function observify(element, callback, config = observerConfig) {
     if (element instanceof HTMLElement) {
@@ -34,11 +34,11 @@ function createObservers(divs, callback) {
 }
 
 
-/*
+/*************************************************************************
 *
 *   Events
 *
-*/
+*************************************************************************/
 
 
 function dispatchEvent(jqElement, event) {
@@ -61,11 +61,11 @@ function dispatchEvent(jqElement, event) {
 }
 
 
-/*
+/*************************************************************************
 *
 *   DOM
 *
-*/
+*************************************************************************/
 
 function cacheElements(list, type = 'native') {
     return list.map(id => (type === 'jquery') 
@@ -74,11 +74,11 @@ function cacheElements(list, type = 'native') {
 }
 
 
-/*
+/*************************************************************************
 *
 *   URL
 *
-*/
+*************************************************************************/
 
 function goToUrl(url) {
     window.location.href = url;
