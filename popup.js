@@ -2,9 +2,11 @@ const chromeLogger = chrome.extension.getBackgroundPage().console.log;
 const queryOptions = { active: true, currentWindow: true };
 let times;
 
-const showTimesheetBtn = $('#show-timesheet');
+const showTimesheetView = $('#show-timesheet');
+const showTimesheetBtn = $('#show-timesheet-btn');
 const mainView = $('#main');
-const loginBtn = $('#re-login');
+const loginView = $('#re-login');
+const loginBtn = $('#re-login-btn');
 const totalHoursDiv = $('#total-hours');
 const submitBtn = $('#btn-submit');
 const submitContainer = $('#submit-container');
@@ -20,6 +22,8 @@ const inputMondayStartConfig = {
     index: 0,
     row: 0,
     postType: 'start',
+    placement: 'bottom',
+    align: 'left',
 };
 inputMondayStart.clockpicker(createClockConfig(inputMondayStart, inputMondayStartConfig, fillEntry));
 
@@ -28,6 +32,8 @@ const inputMondayEndConfig = {
     index: 0,
     row: 0,
     postType: 'end',
+    placement: 'bottom',
+    align: 'right',
 };
 inputMondayEnd.clockpicker(createClockConfig(inputMondayEnd, inputMondayEndConfig, fillEntry));
 
@@ -37,6 +43,8 @@ const inputTuesdayStartConfig = {
     index: 1,
     row: 0,
     postType: 'start',
+    placement: 'bottom',
+    align: 'left',
 };
 inputTuesdayStart.clockpicker(createClockConfig(inputTuesdayStart, inputTuesdayStartConfig, fillEntry));
 
@@ -45,6 +53,8 @@ const inputTuesdayEndConfig = {
     index: 1,
     row: 0,
     postType: 'end',
+    placement: 'bottom',
+    align: 'right',
 };
 inputTuesdayEnd.clockpicker(createClockConfig(inputTuesdayEnd, inputTuesdayEndConfig, fillEntry));
 
@@ -54,6 +64,8 @@ const inputWednesdayStartConfig = {
     index: 2,
     row: 0,
     postType: 'start',
+    placement: 'top',
+    align: 'left',
 };
 inputWednesdayStart.clockpicker(createClockConfig(inputWednesdayStart, inputWednesdayStartConfig, fillEntry));
 
@@ -62,6 +74,8 @@ const inputWednesdayEndConfig = {
     index: 2,
     row: 0,
     postType: 'end',
+    placement: 'top',
+    align: 'right',
 };
 inputWednesdayEnd.clockpicker(createClockConfig(inputWednesdayEnd, inputWednesdayEndConfig, fillEntry));
 
@@ -71,6 +85,8 @@ const inputThursdayStartConfig = {
     index: 3,
     row: 0,
     postType: 'start',
+    placement: 'top',
+    align: 'left',
 };
 inputThursdayStart.clockpicker(createClockConfig(inputThursdayStart, inputThursdayStartConfig, fillEntry));
 
@@ -79,6 +95,8 @@ const inputThursdayEndConfig = {
     index: 3,
     row: 0,
     postType: 'end',
+    placement: 'top',
+    align: 'right',
 };
 inputThursdayEnd.clockpicker(createClockConfig(inputThursdayEnd, inputThursdayEndConfig, fillEntry));
 
@@ -88,6 +106,8 @@ const inputFridayStartConfig = {
     index: 4,
     row: 0,
     postType: 'start',
+    placement: 'top',
+    align: 'left',
 };
 inputFridayStart.clockpicker(createClockConfig(inputFridayStart, inputFridayStartConfig, fillEntry));
 
@@ -96,6 +116,8 @@ const inputFridayEndConfig = {
     index: 4,
     row: 0,
     postType: 'end',
+    placement: 'top',
+    align: 'right',
 };
 inputFridayEnd.clockpicker(createClockConfig(inputFridayEnd, inputFridayEndConfig, fillEntry));
 
@@ -103,9 +125,11 @@ inputFridayEnd.clockpicker(createClockConfig(inputFridayEnd, inputFridayEndConfi
 
 
 function createClockConfig(input, configs, callback) {
-    const { index, row, postType } = configs;
+    const { index, row, postType, placement, align } = configs;
     return {
         autoclose: true,
+        placement,
+        align,
         afterDone: function() {
             const timeObj = parseTime(input.val());
             const query = { index, row, postType };
@@ -169,7 +193,7 @@ function checkIfBilling() {
 
 function switchToBilling(url) {
     if (isBillingPage(url)) {
-        showTimesheetBtn.hide();
+        showTimesheetView.hide();
         mainView.show();
     }
 }
@@ -181,9 +205,9 @@ function checkIfHome() {
 
 function switchToHome(onStandardHome) {
     if (onStandardHome) {
-        showTimesheetBtn.show();
+        showTimesheetView.show();
         mainView.hide();
-        loginBtn.hide();
+        loginView.hide();
     }
 }
 
@@ -194,9 +218,9 @@ function checkIfLoggedIn() {
 
 function switchToLogin(sessionExpired) {
     if (sessionExpired) {
-        showTimesheetBtn.hide();
+        showTimesheetView.hide();
         mainView.hide();
-        loginBtn.show();
+        loginView.show();
     }
 }
 

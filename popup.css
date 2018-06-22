@@ -1,11 +1,21 @@
+html {
+    max-height: 1000px;
+}
+
 body {
     font-size: 14px;
-    height: 500px;
     width: 600px;
+    max-height: 1000px;
     margin: 10px;
+    position: relative;
+    overflow: scroll;
 }
 
 button {
     height: 50px;
     outline: none;
+}
+
+#custom {
+    /*margin-bottom: 300px;*/
 }

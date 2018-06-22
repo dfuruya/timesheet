@@ -4,15 +4,21 @@
 <head>
     <link rel="stylesheet" type="text/css" href="jquery-clockpicker.min.css">
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap-clockpicker.min.css">
     <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container">
 
-        <button id="show-timesheet" class="btn btn-primary" style="display: none">Go to timesheet page</button>
+        <div id="show-timesheet" style="display: none" class="row justify-content-end">
+            <button id="show-timesheet-btn" class="btn btn-primary">Go to timesheet page</button>
+        </div>
 
-        <button id="re-login" class="btn btn-primary" style="display: none">Log back in</button>
+        <div id="re-login" style="display: none" class="row justify-content-end">
+            <button id="re-login-btn" class="btn btn-primary">Log back in</button>
+        </div>
+
 
         <div id="main" style="display: none">
 
@@ -60,7 +66,7 @@
 
                             <hr/>
                             <div class="row">Total hours worked:</div>
-                            <p id="total-hours" style="font-size: 20px"></p>
+                            <p id="total-hours" style="font-size: 20px; font-weight: 700"></p>
 
                             <div class="row">
                                 Timesheet has been filled out! If you need to verify or change a time, now's the time to check. If it looks good, just click on the button below (or the button the page itself) to submit:
@@ -85,60 +91,95 @@
                 <!-- CUSTOM -->
 
                 <div class="tab-pane fade" id="custom" role="tabpanel" aria-labelledby="custom-tab">
-                    This option will allow custom entries.
+
                     <div class="container" id="eight">
 
+                        <hr/>
                         <div class="row">
-                            <div class="col-sm-3">monday</div>
+                            <div class="col-sm-3">MONDAY</div>
+                            <div class="col">START</div>
+                            <div class="col">END</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3"></div>
                             <div class="col">
-                                <input id="input-monday-0-start" value="" placeholder="enter START time" data-default="09:00">
+                                <input id="input-monday-0-start" value="" placeholder="start" data-default="09:00">
                             </div>
                             <div class="col">
-                                <input id="input-monday-0-end" value="" placeholder="enter END time" data-default="17:30">
+                                <input id="input-monday-0-end" value="" placeholder="end" data-default="17:30">
                             </div>
                         </div>
 
 
+                        <hr/>
                         <div class="row">
-                            <div class="col-sm-3">tuesday</div>
+                            <div class="col-sm-3">TUESDAY</div>
+                            <div class="col">START</div>
+                            <div class="col">END</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3"></div>
                             <div class="col">
-                                <input id="input-tuesday-0-start" value="" placeholder="enter START time" data-default="09:00">
+                                <input id="input-tuesday-0-start" value="" placeholder="start" data-default="09:00">
                             </div>
                             <div class="col">
-                                <input id="input-tuesday-0-end" value="" placeholder="enter END time" data-default="17:30">
+                                <input id="input-tuesday-0-end" value="" placeholder="end" data-default="17:30">
                             </div>
                         </div>
 
 
+                        <hr/>
                         <div class="row">
-                            <div class="col-sm-3">wednesday</div>
+                            <div class="col-sm-3">WEDNESDAY</div>
+                            <div class="col">START</div>
+                            <div class="col">END</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3"></div>
                             <div class="col">
-                                <input id="input-wednesday-0-start" value="" placeholder="enter START time" data-default="09:00">
+                                <input id="input-wednesday-0-start" value="" placeholder="start" data-default="09:00">
                             </div>
                             <div class="col">
-                                <input id="input-wednesday-0-end" value="" placeholder="enter END time" data-default="17:30">
+                                <input id="input-wednesday-0-end" value="" placeholder="end" data-default="17:30">
                             </div>
                         </div>
 
 
+                        <hr/>
                         <div class="row">
-                            <div class="col-sm-3">thursday</div>
+                            <div class="col-sm-3">THURSDAY</div>
+                            <div class="col">START</div>
+                            <div class="col">END</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3"></div>
                             <div class="col">
-                                <input id="input-thursday-0-start" value="" placeholder="enter START time" data-default="09:00">
+                                <input id="input-thursday-0-start" value="" placeholder="start" data-default="09:00">
                             </div>
                             <div class="col">
-                                <input id="input-thursday-0-end" value="" placeholder="enter END time" data-default="17:30">
+                                <input id="input-thursday-0-end" value="" placeholder="end" data-default="17:30">
                             </div>
                         </div>
 
 
+                        <hr/>
                         <div class="row">
-                            <div class="col-sm-3">friday</div>
+                            <div class="col-sm-3">FRIDAY</div>
+                            <div class="col">START</div>
+                            <div class="col">END</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-3"></div>
                             <div class="col">
-                                <input id="input-friday-0-start" value="" placeholder="enter START time" data-default="09:00">
+                                <input id="input-friday-0-start" value="" placeholder="start" data-default="09:00">
                             </div>
                             <div class="col">
-                                <input id="input-friday-0-end" value="" placeholder="enter END time" data-default="17:30">
+                                <input id="input-friday-0-end" value="" placeholder="end" data-default="17:30">
                             </div>
                         </div>
 
@@ -155,6 +196,7 @@
     <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="jquery-clockpicker.min.js"></script>
     <script type="text/javascript" src="bootstrap.min.js"></script>
+    <script type="text/javascript" src="bootstrap-clockpicker.min.js"></script>
     <script type="text/javascript" src="popup.js"></script>
 </body>
 
