@@ -22,8 +22,6 @@ const inputMondayStartConfig = {
     index: 0,
     row: 0,
     postType: 'start',
-    placement: 'bottom',
-    align: 'left',
 };
 inputMondayStart.clockpicker(createClockConfig(inputMondayStart, inputMondayStartConfig, fillEntry));
 
@@ -32,8 +30,6 @@ const inputMondayEndConfig = {
     index: 0,
     row: 0,
     postType: 'end',
-    placement: 'bottom',
-    align: 'right',
 };
 inputMondayEnd.clockpicker(createClockConfig(inputMondayEnd, inputMondayEndConfig, fillEntry));
 
@@ -43,8 +39,6 @@ const inputTuesdayStartConfig = {
     index: 1,
     row: 0,
     postType: 'start',
-    placement: 'bottom',
-    align: 'left',
 };
 inputTuesdayStart.clockpicker(createClockConfig(inputTuesdayStart, inputTuesdayStartConfig, fillEntry));
 
@@ -53,8 +47,6 @@ const inputTuesdayEndConfig = {
     index: 1,
     row: 0,
     postType: 'end',
-    placement: 'bottom',
-    align: 'right',
 };
 inputTuesdayEnd.clockpicker(createClockConfig(inputTuesdayEnd, inputTuesdayEndConfig, fillEntry));
 
@@ -65,7 +57,6 @@ const inputWednesdayStartConfig = {
     row: 0,
     postType: 'start',
     placement: 'top',
-    align: 'left',
 };
 inputWednesdayStart.clockpicker(createClockConfig(inputWednesdayStart, inputWednesdayStartConfig, fillEntry));
 
@@ -75,7 +66,6 @@ const inputWednesdayEndConfig = {
     row: 0,
     postType: 'end',
     placement: 'top',
-    align: 'right',
 };
 inputWednesdayEnd.clockpicker(createClockConfig(inputWednesdayEnd, inputWednesdayEndConfig, fillEntry));
 
@@ -86,7 +76,6 @@ const inputThursdayStartConfig = {
     row: 0,
     postType: 'start',
     placement: 'top',
-    align: 'left',
 };
 inputThursdayStart.clockpicker(createClockConfig(inputThursdayStart, inputThursdayStartConfig, fillEntry));
 
@@ -96,7 +85,6 @@ const inputThursdayEndConfig = {
     row: 0,
     postType: 'end',
     placement: 'top',
-    align: 'right',
 };
 inputThursdayEnd.clockpicker(createClockConfig(inputThursdayEnd, inputThursdayEndConfig, fillEntry));
 
@@ -107,7 +95,6 @@ const inputFridayStartConfig = {
     row: 0,
     postType: 'start',
     placement: 'top',
-    align: 'left',
 };
 inputFridayStart.clockpicker(createClockConfig(inputFridayStart, inputFridayStartConfig, fillEntry));
 
@@ -117,7 +104,6 @@ const inputFridayEndConfig = {
     row: 0,
     postType: 'end',
     placement: 'top',
-    align: 'right',
 };
 inputFridayEnd.clockpicker(createClockConfig(inputFridayEnd, inputFridayEndConfig, fillEntry));
 
@@ -125,7 +111,7 @@ inputFridayEnd.clockpicker(createClockConfig(inputFridayEnd, inputFridayEndConfi
 
 
 function createClockConfig(input, configs, callback) {
-    const { index, row, postType, placement, align } = configs;
+    const { index, row, postType, placement = 'bottom', align = 'left' } = configs;
     return {
         autoclose: true,
         placement,

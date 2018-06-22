@@ -4,7 +4,8 @@ html {
 
 body {
     font-size: 14px;
-    width: 600px;
+    width: 720px;
+    /*max-width: 720px;*/
     max-height: 1000px;
     margin: 10px;
     position: relative;
@@ -16,6 +17,6 @@ button {
     outline: none;
 }
 
-#custom {
-    /*margin-bottom: 300px;*/
+.container {
+    max-width: 700px;
 }
